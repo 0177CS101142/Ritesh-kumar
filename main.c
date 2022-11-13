@@ -1,89 +1,164 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <dir.h>
+#include <errno.h>
+#include "conio2.h"
+#include "mtb.h"
 
-int TotalAmount=0,TotalWithdrow =0,Totaldiposite =0;
-int TotalTransfer=0;
-int dip,with,Tr,chack;
-char name[20];
-int a,ch,acc;
-int main()
-{
-    printf("\n WELCOME TO MY ATM");
-    printf("\nEnter your name :");
-    gets(name);
-    printf("Enter your account number :");
-    scanf("%d",&a);
-    while(1)
-    {
-    printf("\n******************************************\n");
-    printf("\n 1.diposite amount");
-    printf("\n 2.withdrow amount");
-    printf("\n 3.transfer amount");
-    printf("\n 4.chack amount details");
-    printf("\n 5.exit from own account");
-    printf("\n Enter your choice :");
-    scanf("%d",&ch);
-        switch(ch)
-        {
-
-        case 1:
-            printf("Enter your amount for diposite :");
-            scanf("%d",&dip);
-            TotalAmount=TotalAmount+dip;
-            printf("your  amount is Diposite  :%d",TotalAmount);
-            Totaldiposite=Totaldiposite+dip;
+int main(){
+    int result=mkdir("c:\\Movie Ticket Booking");
+    if(result!=0 && errno!=17){
+        printf("Sorry! Application can not run");
+        printf("\nError code:%d,",errno);
+        perror("Reason");
+        return 1;
+    }
+    add_questions();
+    set_master_admin();
+    create_user("admin");
+    int choice,resp,delete_account;
+    user *ur;
+    while(1){
+        choice=enter_login_choice();
+        if(choice==0)
             break;
+        switch(choice){
+            case 1:
+                ur=login("admin");
+                if(ur==NULL)
+                    break;
+                while(1){
+                    choice=enter_choice(ur);
+                    if(choice==0)
+                        break;
+                    switch(choice){
+                        case 1:
+                            add_theater();
+                            break;
+                        case 2:
+                            show_theater();
+                            break;
+                        case 3:
+                            resp=delete_theater();
+                            if(resp==1){
+                                print_char(' ',80,25,BLACK);
+                                print_title_in_middle("Theater Deleted Successfully",25,LIGHTGREEN);
+                            }
+                            else{
+                                print_char(' ',80,25,BLACK);
+                                print_title_in_middle("Could Not Delete Theater",25,RED);
+                            }
+                            getch();
+                            break;
+                        case 4:
+                            add_movie();
+                            break;
+                        case 5:
+                            show_movie();
+                            break;
+                        case 6:
+                            resp=delete_movie();
+                            if(resp==1){
+                                print_char(' ',80,25,BLACK);
+                                print_title_in_middle("Movie Deleted Successfully",25,LIGHTGREEN);
+                                getch();
+                            }
+                            else{
+                                print_char(' ',80,25,BLACK);
+                                print_title_in_middle("Could Not Delete Movie",25,RED);
+                                 getch();
+                            }
+                            break;
+                        case 7:
+                            change_contact_details(ur);
+                            break;
+                        case 8:
+                            change_security_question(ur);
+                            break;
+                        case 9:
+                            change_password(ur);
+                            break;
+                        case 10:
+                            show_my_profile(ur);
+                            break;
+                        default:
+                            print_char(' ',80,25,BLACK);
+                            print_title_in_middle("invalid Choice! Try Again.",25,RED);
+                            getch();
+                            print_char(' ',80,25,BLACK);
+                    }
+                }
+                if(choice==0)
+                    break;
+            case 2:
+                ur=login("user");
+                if(ur==NULL)
+                    break;
+                while(1){
+                    choice=enter_choice(ur);
+                    if(choice==0)
+                        break;
+                    switch(choice){
+                        case 1:
+                            show_movie();
+                            break;
+                        case 2:
+                            booking(ur);
+                            break;
+                        case 3:
+                            show_bookings_of_user(ur);
+                            break;
+                        case 4:
+                            resp=cancel_bookings_of_user(ur);
+                            if(resp==1){
+                                print_char(' ',80,25,BLACK);
+                                print_title_in_middle("Booking Cancelled Successsfully",25,LIGHTGREEN);
+                                getch();
+                            }
+                            break;
+                        case 5:
+                            change_contact_details(ur);
+                            break;
+                        case 6:
+                            change_security_question(ur);
+                            break;
+                        case 7:
+                            change_password(ur);
+                            break;
+                        case 8:
+                            show_my_profile(ur);
+                            break;
+                        case 9:
+                            delete_account=delete_my_account(ur);
+                            if(delete_account==1){
+                                print_char(' ',80,25,BLACK);
+                                print_title_in_middle("Account Deleted Successfully Successsfully",25,LIGHTGREEN);
+                                getch();
+                            }
+                            break;
+                        default:
+                            print_char(' ',80,25,BLACK);
+                            print_title_in_middle("invalid Choice! Try Again.",25,RED);
+                            getch();
+                            print_char(' ',80,25,BLACK);
+                    }
+                   if(delete_account==1)
+                       break;
 
-        case 2:
-            printf("\n******************************************\n");
-            printf("Enter your amount you want to withdrow :");
-            scanf("%d",&with);
-            if(with<=TotalAmount){
-            TotalAmount=TotalAmount-with;
-            TotalWithdrow=TotalWithdrow+with;
-            printf("\n your amount is Withdrow :%d",TotalWithdrow);
-            }
-            else
-                printf("your Amount is very less");
-            break;
-
-        case 3:
-            printf("\n******************************************\n");
-            printf("Enter your amount for transfer :");
-            scanf("%d",&Tr);
-            if(Tr<=TotalAmount){
-             TotalAmount=TotalAmount-Tr;
-              TotalTransfer=TotalTransfer+Tr;
-              printf("\n your  amount is Transfer :%d",TotalTransfer);
-            }
-             else
-            printf("your amount is very less");
-            break;
-
-        case 4:
-             printf("\n******************************************\n");
-             printf("\n your total Amount is :%d",TotalAmount);
-             printf("\n your diposite Amount is :%d",Totaldiposite);
-             printf("\n your withrow Amount is :%d",TotalWithdrow);
-             printf("\n your transfer Amount is :%d",TotalTransfer);
-             break;
-
-        case 5:
-            printf("\n**********************************************\n");
-             printf("\n your Name is :%s",name);
-             printf("\n your Account Number is :%d",a);
-             printf("\n your Remaining Amount is :%d",TotalAmount);
-             printf("\n your diposite Amount is :%d",Totaldiposite);
-             printf("\n your withrow Amount is :%d",TotalWithdrow);
-             printf("\n your transfer Amount is :%d",TotalTransfer);
-             printf("\n************THANK YOU FOR USING*****************\n");
-             exit(0);
-
-        default:
-            printf("\n invalid choice");
+                }
+            if(delete_account==1)
+                    break;
+            if(choice==0)
+                break;
+            case 3:
+                create_user("user");
+                break;
+            default:
+                print_char(' ',80,25,BLACK);
+                print_title_in_middle("invalid Choice! Try Again.",25,RED);
+                getch();
+                print_char(' ',80,25,BLACK);
         }
     }
-
-
-return 0;
+    return 0;
 }
