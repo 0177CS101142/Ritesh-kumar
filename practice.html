@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <p id="c">Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        alias nostrum, dolores fuga consequatur maiores a accusamus, aperiam
+        mollitia aliquid. Optio magni eos, in nulla praesentium iusto placeat
+        adipisci labore consectetur hic aperiam consequuntur eius eaque quae
+        nesciunt. Pariatur sequi et amet ducimus.</p>
+
+    <button onclick="myFunction()">click me</button>
+
+    <p id="demo">na</p>
+    <script>
+        function myFunction() {
+            var x=document.getElementById('c').textContent;
+            
+            if(x.style.display=='block')
+            {
+                document.getElementById('demo').innerHTML="Ok";
+            }
+            else{
+                document.getElementById('demo').innerHTML="not ok";
+            }
+        }
+    </script>
+
+
+
+</body>
+
+</html>
